@@ -1,0 +1,326 @@
+```html
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dollarprint | Advanced Trading & Bot Automation Suite</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: {
+                            900: '#06080c',
+                            800: '#0b0e14',
+                            700: '#121824',
+                            600: '#182232',
+                            500: '#233044'
+                        },
+                        emerald: {
+                            glow: '#10b981',
+                            accent: '#059669'
+                        },
+                        coral: {
+                            glow: '#ef4444',
+                            accent: '#dc2626'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #06080c;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(18, 24, 36, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        .glass-card-hover:hover {
+            background: rgba(24, 34, 50, 0.85);
+            border-color: rgba(16, 185, 129, 0.3);
+            transition: all 0.2s ease-in-out;
+        }
+        .glow-emerald {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+        }
+        .glow-coral {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.25);
+        }
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0e14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #10b981;
+        }
+        /* Animated pulses */
+        @keyframes pulse-fast {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .animate-pulse-fast {
+            animation: pulse-fast 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-200 bg-[#06080c]">
+
+    <!-- Top Navigation Header -->
+    <header class="h-16 border-b border-white/10 bg-obsidian-800/90 backdrop-blur-md px-4 flex items-center justify-between sticky top-0 z-40">
+        <div class="flex items-center space-x-6">
+            <!-- Brand Logo -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('terminal')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                    <i data-lucide="printer" class="w-6 h-6 text-slate-950 stroke-[2.5]"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-black tracking-wider text-white">DOLLAR<span class="text-emerald-400">PRINT</span></span>
+                    <span class="block text-[9px] text-slate-400 font-mono tracking-widest uppercase -mt-1">Deriv Algorithmic Hub</span>
+                </div>
+            </div>
+
+            <!-- Main Nav Tabs -->
+            <nav class="hidden md:flex items-center space-x-1">
+                <button onclick="switchView('terminal')" id="nav-terminal" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold flex items-center space-x-2 text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
+                    <i data-lucide="activity" class="w-4 h-4"></i>
+                    <span>Terminal</span>
+                </button>
+                <button onclick="switchView('bots')" id="nav-bots" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-slate-100 hover:bg-white/5 flex items-center space-x-2 transition">
+                    <i data-lucide="bot" class="w-4 h-4"></i>
+                    <span>Auto Bots</span>
+                </button>
+                <button onclick="switchView('builder')" id="nav-builder" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-slate-100 hover:bg-white/5 flex items-center space-x-2 transition">
+                    <i data-lucide="blocks" class="w-4 h-4"></i>
+                    <span>Strategy Builder</span>
+                </button>
+                <button onclick="switchView('copytrading')" id="nav-copytrading" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-slate-100 hover:bg-white/5 flex items-center space-x-2 transition">
+                    <i data-lucide="users" class="w-4 h-4"></i>
+                    <span>Copy Trading</span>
+                </button>
+                <button onclick="switchView('cashier')" id="nav-cashier" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-slate-100 hover:bg-white/5 flex items-center space-x-2 transition">
+                    <i data-lucide="wallet" class="w-4 h-4"></i>
+                    <span>Cashier</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Account Controls & User Actions -->
+        <div class="flex items-center space-x-3">
+            <!-- Connection Status -->
+            <div class="hidden sm:flex items-center space-x-2 px-2.5 py-1 rounded-full bg-slate-900 border border-white/10 text-xs font-mono">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse-fast"></span>
+                <span class="text-slate-300">Deriv WS Live</span>
+            </div>
+
+            <!-- Account Type Selector & Balance display -->
+            <div class="flex items-center bg-obsidian-700 rounded-xl p-1 border border-white/10">
+                <button id="accountToggleBtn" onclick="toggleAccountType()" class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center space-x-2 bg-emerald-500 text-slate-950">
+                    <span id="accountTypeLabel">DEMO</span>
+                </button>
+                <div class="px-3 py-1 font-mono text-sm font-bold text-white flex items-center space-x-1">
+                    <span>$</span>
+                    <span id="accountBalanceDisplay">10,000.00</span>
+                </div>
+            </div>
+
+            <!-- Deposit Quick Button -->
+            <button onclick="openCashierModal('deposit')" class="hidden lg:flex items-center space-x-1 px-3 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold rounded-xl text-xs shadow-md transition">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>Deposit</span>
+            </button>
+
+            <!-- User Profile Avatar/Auth Button -->
+            <button onclick="toggleAuthModal()" class="w-9 h-9 rounded-xl bg-obsidian-600 border border-white/10 flex items-center justify-center hover:bg-white/10 transition text-slate-300">
+                <i data-lucide="user" class="w-5 h-5"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 flex flex-col overflow-hidden relative" id="main-content">
+
+        <!-- ========================================== -->
+        <!-- VIEW 1: TRADING TERMINAL                   -->
+        <!-- ========================================== -->
+        <div id="view-terminal" class="view-panel flex-1 flex flex-col lg:flex-row overflow-hidden">
+            
+            <!-- Left Chart & Analysis Panel -->
+            <div class="flex-1 flex flex-col border-r border-white/10 bg-obsidian-900 min-h-[400px] overflow-y-auto lg:overflow-hidden">
+                
+                <!-- Market Bar & Selector -->
+                <div class="p-3 bg-obsidian-800 border-b border-white/10 flex flex-wrap gap-3 items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <!-- Asset Selector Dropdown -->
+                        <div class="relative">
+                            <select id="assetSelect" onchange="changeAsset(this.value)" class="bg-obsidian-700 text-white text-sm font-bold py-2 px-3 pr-8 rounded-xl border border-white/10 focus:outline-none focus:border-emerald-500 appearance-none cursor-pointer">
+                                <optgroup label="Synthetic Volatility Indices">
+                                    <option value="R_100">Volatility 100 Index</option>
+                                    <option value="1HZ100V" selected>Volatility 100 (1s) Index</option>
+                                    <option value="R_75">Volatility 75 Index</option>
+                                    <option value="1HZ75V">Volatility 75 (1s) Index</option>
+                                    <option value="R_50">Volatility 50 Index</option>
+                                    <option value="R_25">Volatility 25 Index</option>
+                                    <option value="R_10">Volatility 10 Index</option>
+                                </optgroup>
+                                <optgroup label="Crash & Boom Indices">
+                                    <option value="BOOM1000">Boom 1000 Index</option>
+                                    <option value="CRASH1000">Crash 1000 Index</option>
+                                    <option value="BOOM500">Boom 500 Index</option>
+                                    <option value="CRASH500">Crash 500 Index</option>
+                                    <option value="BOOM300">Boom 300 Index</option>
+                                </optgroup>
+                                <optgroup label="Jump Indices">
+                                    <option value="JD10">Jump 10 Index</option>
+                                    <option value="JD25">Jump 25 Index</option>
+                                    <option value="JD50">Jump 50 Index</option>
+                                </optgroup>
+                                <optgroup label="Forex Majors">
+                                    <option value="frxEURUSD">EUR / USD</option>
+                                    <option value="frxGBPUSD">GBP / USD</option>
+                                    <option value="frxUSDJPY">USD / JPY</option>
+                                </optgroup>
+                            </select>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 absolute right-2.5 top-3 pointer-events-none"></i>
+                        </div>
+
+                        <!-- Live Price Display -->
+                        <div class="flex items-baseline space-x-2">
+                            <span id="currentPriceDisplay" class="text-xl font-mono font-bold text-emerald-400">6542.18</span>
+                            <span id="priceChangeBadge" class="text-xs font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 flex items-center">
+                                <i data-lucide="trending-up" class="w-3 h-3 mr-1"></i> +0.14%
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Chart Mode & Controls -->
+                    <div class="flex items-center space-x-2">
+                        <!-- Chart Type Toggle -->
+                        <div class="bg-obsidian-700 rounded-lg p-0.5 border border-white/10 flex">
+                            <button onclick="setChartType('area')" id="chartTypeArea" class="px-2.5 py-1 rounded-md text-xs font-semibold text-emerald-400 bg-obsidian-600">Area/Tick</button>
+                            <button onclick="setChartType('candle')" id="chartTypeCandle" class="px-2.5 py-1 rounded-md text-xs font-semibold text-slate-400 hover:text-white">Candlestick</button>
+                        </div>
+
+                        <!-- Timeframe Selection -->
+                        <div class="bg-obsidian-700 rounded-lg p-0.5 border border-white/10 flex text-xs">
+                            <button onclick="setTimeframe('1s')" class="tf-btn px-2 py-1 rounded text-emerald-400 font-mono">1s</button>
+                            <button onclick="setTimeframe('1m')" class="tf-btn px-2 py-1 rounded text-slate-400 font-mono">1m</button>
+                            <button onclick="setTimeframe('5m')" class="tf-btn px-2 py-1 rounded text-slate-400 font-mono">5m</button>
+                        </div>
+
+                        <!-- Indicator Toggles -->
+                        <button onclick="toggleIndicator('ma')" id="indMaBtn" class="p-1.5 rounded-lg bg-obsidian-700 border border-white/10 text-xs text-slate-400 hover:text-emerald-400">EMA</button>
+                        <button onclick="toggleIndicator('rsi')" id="indRsiBtn" class="p-1.5 rounded-lg bg-obsidian-700 border border-white/10 text-xs text-slate-400 hover:text-emerald-400">RSI</button>
+                    </div>
+                </div>
+
+                <!-- HTML5 Canvas Chart Container -->
+                <div class="flex-1 relative min-h-[280px] bg-[#090d14] overflow-hidden">
+                    <canvas id="marketCanvas" class="w-full h-full block cursor-crosshair"></canvas>
+                    
+                    <!-- Overlay Last Digit HUD -->
+                    <div class="absolute top-4 right-4 glass-card px-3 py-2 rounded-xl border border-white/10 flex items-center space-x-3">
+                        <span class="text-xs text-slate-400 font-medium">Last Digit:</span>
+                        <span id="hudLastDigit" class="font-mono text-2xl font-black text-emerald-400 animate-pulse">8</span>
+                        <div class="h-6 w-px bg-white/10"></div>
+                        <span id="hudDigitType" class="text-xs font-mono font-bold px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400">EVEN</span>
+                    </div>
+                </div>
+
+                <!-- Bottom Digit & Technical Indicators Bar -->
+                <div class="p-3 bg-obsidian-800 border-t border-white/10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    
+                    <!-- 0-9 Digit Distribution -->
+                    <div class="md:col-span-2 glass-card p-3 rounded-xl border border-white/10">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center">
+                                <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 mr-1 text-emerald-400"></i> Digit Frequency Stats (Last 100 Ticks)
+                            </span>
+                            <span class="text-[10px] font-mono text-slate-500">Live Analysis</span>
+                        </div>
+                        <div class="grid grid-cols-10 gap-1.5" id="digitFreqContainer">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Even / Odd & Technical Meter -->
+                    <div class="glass-card p-3 rounded-xl border border-white/10 flex flex-col justify-between space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-slate-400">Even vs Odd Ratio</span>
+                            <span class="text-xs font-mono font-bold text-slate-200" id="evenOddRatioText">52% / 48%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-2.5 flex overflow-hidden">
+                            <div id="evenRatioBar" class="bg-blue-500 h-full transition-all duration-300" style="width: 52%"></div>
+                            <div id="oddRatioBar" class="bg-purple-500 h-full transition-all duration-300" style="width: 48%"></div>
+                        </div>
+                        <div class="flex justify-between items-center text-xs pt-1 font-mono">
+                            <span class="text-slate-400">RSI (14): <strong text-emerald-400 id="rsiValueText">58.4</strong></span>
+                            <span class="text-slate-400">Signal: <strong class="text-emerald-400" id="techSignalText">NEUTRAL / BUY</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Trading Execution Panel -->
+            <div class="w-full lg:w-96 bg-obsidian-800 p-4 border-t lg:border-t-0 lg:border-l border-white/10 flex flex-col justify-between overflow-y-auto">
+                <div class="space-y-4">
+                    
+                    <!-- Contract Type Selector Tabs -->
+                    <div>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 block">Contract Type</label>
+                        <div class="grid grid-cols-3 gap-1 bg-obsidian-900 p-1 rounded-xl border border-white/10 text-xs font-medium">
+                            <button onclick="setContractCategory('rise_fall')" id="catRiseFall" class="py-2 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30">Rise / Fall</button>
+                            <button onclick="setContractCategory('matches_differs')" id="catMatches" class="py-2 rounded-lg text-slate-400 hover:text-white">Digits</button>
+                            <button onclick="setContractCategory('high_low')" id="catHighLow" class="py-2 rounded-lg text-slate-400 hover:text-white">High / Low</button>
+                        </div>
+                    </div>
+
+                    <!-- Ticks / Duration Selector -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-semibold text-slate-400">Duration (Ticks / Seconds)</label>
+                            <span class="text-xs font-mono text-emerald-400" id="durationDisplay">5 Ticks</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <input type="range" id="durationSlider" min="1" max="10" value="5" oninput="updateDuration(this.value)" class="w-full accent-emerald-500 bg-obsidian-700 rounded-lg cursor-pointer">
+                        </div>
+                    </div>
+
+                    <!-- Digit Selector (Only active for Digits category) -->
+                    <div id="digitPredictionBox" class="hidden space-y-1">
+                        <label class="text-xs font-semibold text-slate-400">Target Prediction Digit</label>
+                        <div class="grid grid-cols-5 gap-1.5" id="digitPickerGrid">
+                            <!-- Generated 0-9 buttons -->
+                        </div>
+                    </div>
+
+                    <!-- Stake Input & Multiplier Settings -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-semibold text-slate-400">Stake Amount ($)</label>
+                            <span class="text-[10px] text-slate-400">Payout Return: <strong class="text-emerald-400" id="payoutMultiplier">195%
